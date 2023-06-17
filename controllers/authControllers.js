@@ -5,6 +5,8 @@ const {
   loginService,
   logoutService,
   updateAvatarService,
+  verifyEmailService,
+  resendVerificationsService,
 } = require("../models/services/auth");
 const { catchAsync } = require("../utils/catchAsync");
 
@@ -13,6 +15,26 @@ let signup = async (req, res) => {
   res.status(201).json(newUser);
 };
 signup = catchAsync(signup);
+
+let verifyEmail = async (req, res) => {
+  await verifyEmailService(req.params);
+
+  res.json({
+    message: "Verification successful",
+  });
+};
+
+verifyEmail = catchAsync(verifyEmail);
+
+let resendVerificationCode = async (req, res) => {
+  await resendVerificationsService(req.body)
+
+  res.json({
+    message: "Email resended",
+  });
+};
+
+resendVerificationCode = catchAsync(resendVerificationCode);
 
 let login = async (req, res) => {
   const { user, token } = await loginService(req.body);
@@ -69,4 +91,6 @@ module.exports = {
   getCurrentUser,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  resendVerificationCode,
 };
